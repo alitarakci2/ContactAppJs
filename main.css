@@ -31,3 +31,6 @@ color: black;
 .bilgi--error{
     border: 1px solid red;
 }
+.far{
+    pointer-events: none;
+}

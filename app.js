@@ -10,15 +10,41 @@ const form = document.getElementById('form-rehber');
 //evetn listenerlarin tanimlanmasi
 
 form.addEventListener('submit', kaydet)
+kisiListesi.addEventListener('click', kisiIslemleriniYap);
 
 const tumKisilerDizisi = [];
 
+function kisiIslemleriniYap(event){
+
+   
+    if(event.target.classList.contains('btn--delete')){
+        const silinecekTr = event.target.parentElement.parentElement;
+        const silinecekMail = event.target.parentElement.previousElementSibling.textContent;
+        rehberdenSil(silinecekTr, silinecekMail);
+    }else if(event.target.classList.contains('btn--edit')){
+        console.log("guncelleme")
+    }
+
+}
+
+function rehberdenSil(silinecekTrElement, silinecekMail){
+    silinecekTrElement.remove();
+
+    console.log(silinecekTrElement, silinecekMail);
+
+    tumKisilerDizisi.forEach((kisi, index) => {
+            if(kisi.mail === silinecekMail){
+                tumKisilerDizisi.splice(index,1);
+            }
+    });
+
+    console.log("silme yapildi");
+    console.log(tumKisilerDizisi);
+
+}
 function kaydet(e){
     e.preventDefault();
 
- 
-
- 
 const eklenecekKisi = {
     ad: ad.value,
     soyad: soyad.value,
@@ -37,14 +63,6 @@ const eklenecekKisi = {
     bilgiOlustur(sonuc.mesaj,sonuc.durum);
    
   }
-
-
-
-  
-
-
-
-   
 
 }
 
