@@ -13,6 +13,7 @@ form.addEventListener('submit', kaydet)
 kisiListesi.addEventListener('click', kisiIslemleriniYap);
 
 const tumKisilerDizisi = [];
+let secilenSatir = undefined;
 
 function kisiIslemleriniYap(event){
 
@@ -22,7 +23,13 @@ function kisiIslemleriniYap(event){
         const silinecekMail = event.target.parentElement.previousElementSibling.textContent;
         rehberdenSil(silinecekTr, silinecekMail);
     }else if(event.target.classList.contains('btn--edit')){
-        console.log("guncelleme")
+        document.querySelector('.kaydetGuncelle').value = 'Guncelle';
+        const secilenTr = event.target.parentElement.parentElement;
+        const guncellenecekMail = secilenTr.cells[2].textContent;
+        ad.value = secilenTr.cells[0].textContent;
+        soyad.value = secilenTr.cells[1].textContent;
+        mail.value = secilenTr.cells[2].textContent;
+        secilenSatir = secilenTr;
     }
 
 }
@@ -38,31 +45,52 @@ function rehberdenSil(silinecekTrElement, silinecekMail){
             }
     });
 
-    console.log("silme yapildi");
-    console.log(tumKisilerDizisi);
+ 
+    alanlariTemizle();
+    document.querySelector('.kaydetGuncelle').value = 'kaydet';
+
 
 }
 function kaydet(e){
     e.preventDefault();
 
-const eklenecekKisi = {
+const eklenecekVeyaGuncellenecekKisi = {
     ad: ad.value,
     soyad: soyad.value,
     mail: mail.value
 
   }
 
-  const sonuc = verileriKontrolEt(eklenecekKisi);
+  const sonuc = verileriKontrolEt(eklenecekVeyaGuncellenecekKisi);
   if(sonuc.durum){
-    kisiyiEkle(eklenecekKisi);
- 
-  
+    if(secilenSatir){
+        kisiyiGuncelle(eklenecekVeyaGuncellenecekKisi);
 
+    }else{
+    kisiyiEkle(eklenecekVeyaGuncellenecekKisi);
+
+    }
 
   }else{
     bilgiOlustur(sonuc.mesaj,sonuc.durum);
    
   }
+
+}
+function kisiyiGuncelle(kisi){
+
+    for(let i = 0; i < tumKisilerDizisi.length; i++){
+        if(tumKisilerDizisi[i].mail === secilenSatir.cells[2].textContent){
+            tumKisilerDizisi[i] = kisi
+            break;
+        }
+    }
+    secilenSatir.cells[0].textContent = kisi.ad;
+    secilenSatir.cells[1].textContent = kisi.soyad;
+    secilenSatir.cells[2].textContent = kisi.mail;
+
+    document.querySelector('.kaydetGuncelle').value = 'kaydet';
+    secilenSatir = undefined;
 
 }
 
